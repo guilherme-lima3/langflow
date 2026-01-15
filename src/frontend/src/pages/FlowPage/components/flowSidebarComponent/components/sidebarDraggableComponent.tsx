@@ -183,9 +183,9 @@ export const SidebarDraggableComponent = forwardRef(
                   <div className="flex items-center gap-1.5 transition-all duration-500 group-hover/draggable:opacity-0 group-hover/draggable:pointer-events-none">
                     {beta && (
                       <Badge
-                        variant="pinkStatic"
+                        variant="purpleStatic"
                         size="xq"
-                        className="shrink-0"
+                        className="ml-1.5 shrink-0"
                       >
                         Beta
                       </Badge>
@@ -194,7 +194,7 @@ export const SidebarDraggableComponent = forwardRef(
                       <Badge
                         variant="secondaryStatic"
                         size="xq"
-                        className="shrink-0"
+                        className="ml-1.5 shrink-0"
                       >
                         Legacy
                       </Badge>
