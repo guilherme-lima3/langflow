@@ -16,20 +16,27 @@ export const handleMessageEvent = (
       return true;
     }
     case "token": {
-      // Update message text in React Query cache for streaming
+      // Update message text in React Query cache for streaming.
+      // Only include timestamp if the backend provides it — using new Date() as a
+      // fallback would overwrite the correct server timestamp set by the preceding
+      // add_message event, causing messages to appear out of order when the client
+      // clock differs from the server (e.g. VPN clock drift).
+      const tokenData = data as Record<string, unknown>;
       updateMessage({
-        id: data.id,
-        flow_id: data.flow_id || "",
-        session_id: data.session_id || "",
-        text: data.chunk || "",
-        sender: data.sender || "Machine",
-        sender_name: data.sender_name || "AI",
-        timestamp: data.timestamp || new Date().toISOString(),
-        files: data.files || [],
-        edit: data.edit || false,
-        background_color: data.background_color || "",
-        text_color: data.text_color || "",
-        properties: { ...data.properties, state: "partial" },
+        id: tokenData.id,
+        flow_id: (tokenData.flow_id as string) || "",
+        session_id: (tokenData.session_id as string) || "",
+        text: (tokenData.chunk as string) || "",
+        sender: (tokenData.sender as string) || "Machine",
+        sender_name: (tokenData.sender_name as string) || "AI",
+        ...(tokenData.timestamp
+          ? { timestamp: tokenData.timestamp as string }
+          : {}),
+        files: (tokenData.files as string[]) || [],
+        edit: (tokenData.edit as boolean) || false,
+        background_color: (tokenData.background_color as string) || "",
+        text_color: (tokenData.text_color as string) || "",
+        properties: { ...(tokenData.properties as object), state: "partial" },
       } as Message);
       return true;
     }
